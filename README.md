@@ -122,7 +122,7 @@ La ESP32 se encarga de recibir instrucciones de la FPGA, realizar lecturas del s
 ## RTL del SoC
 
 
-![RTL SoC](RTL_SoC.jpg)
+![RTL SoC](RTL_SoC.jpg)  
 Este diagrama RTL representa la estructura completa del sistema embebido (SoC) implementado en la FPGA. En él se integran los componentes fundamentales para el funcionamiento del sistema, incluyendo:
 
 - El módulo de procesamiento central, encargado de ejecutar la lógica de control basada en los datos de turbidez recibidos.  
@@ -134,4 +134,28 @@ Este diagrama RTL representa la estructura completa del sistema embebido (SoC) i
 
 Este RTL muestra cómo la FPGA recibe la señal digital del sensor de turbidez, la interpreta, y en función del nivel medido, toma decisiones automáticas como habilitar o no el paso de agua mediante la válvula. Además, incluye la comunicación UART con el ESP32 para transmitir los datos recolectados, permitiendo su monitoreo remoto o procesamiento adicional.
 
+
+### Adaptación de voltaje para el ADC del ESP32
+
+La salida analógica del sensor (cable azul en la imagen) entrega una señal en el rango de 0 V a 4.5 V. Sin embargo, la entrada del ADC del ESP32 admite un máximo de 3.3 V, por lo cual conectar esta señal directamente podría dañar el microcontrolador o producir lecturas erróneas.
+
+Para resolver este problema, se implementó un divisor resistivo compuesto por:
+
+- Resistencia R1 = 100 kΩ conectada entre la salida del sensor y la entrada del ESP32.
+- Resistencia R2 = 50 kΩ conectada entre la entrada del ESP32 y GND.
+
+Este divisor reduce la tensión utilizando la siguiente ecuación:
+
+![Ecuación divisor de tensión](./ecuacion_divisor_tension_ADC.png)
+
+
+Con esto se asegura que el voltaje que llega al ESP32 no supere los 3.3 V, manteniendo así la integridad del sistema.
+
+Este tipo de adaptación es crucial cuando se conectan sensores con salida superior a 3.3 V a microcontroladores modernos, que no toleran niveles TTL de 5 V.
+
+Imagen del montaje del divisor de voltaje:
+
+![Divisor de voltaje para ADC](img/imagen_ADC.jpg)
+
+![RTL SoC](imagen_ADC.jpg) 
 
