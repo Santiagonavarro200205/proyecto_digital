@@ -132,8 +132,23 @@ Todo inicia en la FPGA enviando una señal al ESP32; este le envía la instrucci
   <img src="./Diagrama_de_flujo_ESP32.jpg" alt="Diagrama de flujo ESP32" width="6000"/>
 </p>
 
-**Descripción del Diagrama de Flujo – ESP32**  
-Este diagrama representa el flujo de funcionamiento lógico del microcontrolador ESP32 dentro del sistema de monitoreo de turbidez del agua.  
+## Explicación del Diagrama de Flujo del ESP32
+
+Este diagrama representa el funcionamiento lógico del microcontrolador ESP32 dentro del sistema de riego automatizado. A continuación se detalla cada etapa:
+
+1. El proceso inicia con la activación del ESP32.
+2. Se ejecutan las funciones de inicialización `init enable()` y `start()`, las cuales configuran los periféricos y recursos necesarios del sistema.
+3. Se habilita el pin de control mediante la instrucción `init enable Pin`.
+4. A continuación, el sistema evalúa si se ha recibido un dato por el puerto serie RX:
+   - Si no se ha recibido ningún dato, el sistema vuelve a verificar esta condición de forma continua.
+   - Si se recibe un dato en RX, este dato es enviado a un broker MQTT mediante la conexión de red del ESP32.
+5. Luego, se evalúa el estado del pin digital 35:
+   - Si el pin está inactivo, el sistema vuelve a verificar su estado periódicamente.
+   - Si el pin digital 35 está activo, se inicia el proceso de lectura analógica (ADC).
+   - Una vez obtenida la lectura del ADC, el valor digitalizado es transmitido por el puerto TX.
+
+Este flujo garantiza la supervisión continua de los datos recibidos y de las señales digitales que activan la conversión analógica para el monitoreo de parámetros como la turbidez del agua.
+
 
 La ESP32 se encarga de recibir instrucciones de la FPGA, realizar lecturas del sensor de turbidez a través de su ADC, y enviar datos por UART o por Wi-Fi hacia un broker MQTT.
 
@@ -143,14 +158,13 @@ La ESP32 se encarga de recibir instrucciones de la FPGA, realizar lecturas del s
 
 El sistema implementado fue sintetizado y verificado en niveles jerárquicos. A continuación se presentan los diagramas RTL (Register Transfer Level) de los principales módulos del diseño implementado en la FPGA.
 
----
 
 ### 1. RTL del SoC completo - `RTL_SoC.jpg`
 
 Este diagrama representa el sistema completo integrado sobre la FPGA. El diseño es un SoC (System-on-Chip) que combina un procesador RISC-V (FemtoRV32) con múltiples periféricos personalizados conectados a un bus interno. Entre los periféricos se encuentra el controlador de riego, encargado de actuar según los niveles de turbidez del agua.
 
 <p align="center">
-  <img src="./Diagrama_de_flujo_ESP32.jpg" alt="Diagrama de flujo ESP32" width="6000"/>
+  <img src="./RTL_SoC.jpg" alt="RTL SoC" width="6000"/>
 </p>
 
 
@@ -174,7 +188,7 @@ Este diagrama permite visualizar cómo se integran todos los módulos funcionale
 
 Este RTL muestra la vista estructural del periférico encargado de la lógica de decisión sobre el riego, basado en los niveles de turbidez del agua.
 <p align="center">
-  <img src="./Diagrama_de_flujo_ESP32.jpg" alt="Diagrama de flujo ESP32" width="6000"/>
+  <img src="./RTL_controlador_riego.jpg" alt="RTL controlador riego" width="6000"/>
 </p>
 
 Entradas principales:
@@ -198,7 +212,7 @@ La lógica del módulo se basa en comparar el valor de turbidez contra un umbral
 Este diagrama corresponde al nivel más bajo de descripción estructural del módulo controlador de riego, mostrando el detalle de la lógica digital implementada.
 
 <p align="center">
-  <img src="./Diagrama_de_flujo_ESP32.jpg" alt="Diagrama de flujo ESP32" width="6000"/>
+  <img src="./RTL_controlador_riego_interno.jpg" alt="RTL_controlador riego interno" width="6000"/>
 </p>
 
 Componentes destacados:
