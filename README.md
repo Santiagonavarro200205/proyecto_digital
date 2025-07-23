@@ -4,10 +4,13 @@
 En este repositorio se explicará todo lo propuesto y desarrollado en el proyecto de electrónica digital paso a paso.
 
 ### Integrantes:
-- Camilo
-- Sebastián
+- Christian Camilo Cardenas
+chcardenasr@unal.edu.co 
+- Sebastián Tibaquirá Sánchez
+stibaquira@unal.edu.co
 - Kuper
-- Santiago
+- Daniel santiago Navarro Gil
+dnavarrog@unal.edu.co
 
 ### Descripción general
 Este proyecto consiste en la medición de la turbidez de agua implementando un sensor de turbidez, una tarjeta de desarrollo ESP32 Wi-Fi, una FPGA y la transmisión de estos datos a un servidor vía Wi-Fi.
@@ -154,8 +157,6 @@ Con esto se asegura que el voltaje que llega al ESP32 no supere los 3.3 V, man
 Este tipo de adaptación es crucial cuando se conectan sensores con salida superior a 3.3 V a microcontroladores modernos, que no toleran niveles TTL de 5 V.
 
 Imagen del montaje del divisor de voltaje:
-
-![Divisor de voltaje para ADC](img/imagen_ADC.jpg)
 
 ![RTL SoC](imagen_ADC.jpg) 
 
