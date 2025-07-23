@@ -8,7 +8,8 @@ En este repositorio se explicará todo lo propuesto y desarrollado en el proyect
 chcardenasr@unal.edu.co 
 - Sebastián Tibaquirá Sánchez
 stibaquira@unal.edu.co
-- Kuper
+- Anderson Camilo Rosero Yela
+aroseroy@unal.edu.co 
 - Daniel santiago Navarro Gil
 dnavarrog@unal.edu.co
 
@@ -33,8 +34,9 @@ Diseñar un sistema de medición de turbidez de agua que obtenga datos en tiempo
 ## Descripción diagrama de caja negra
 En el siguiente diagrama se muestran 4 componentes principales: un sensor de turbidez del agua, una tarjeta de desarrollo ESP32 Wi-Fi, una FPGA y un servidor receptor de datos.  
 
-![Diagrama de caja negra](diagrama_caja_negra.png)
-
+<p align="center">
+  <img src="./diagrama_caja_negra.png" alt="Diagrama de caja negras" width="6000"/>
+</p>
 
 Todo inicia en la FPGA enviando una señal al ESP32; este le envía la instrucción de realizar la medición de turbidez al sensor, el ESP32 recibe el dato y lo envía a la FPGA. La FPGA convierte el dato para su lectura, análisis e interpretación, y posteriormente envía el resultado del análisis al ESP32, que finalmente transmite los datos vía Wi-Fi al servidor.
 
@@ -59,8 +61,9 @@ Todo inicia en la FPGA enviando una señal al ESP32; este le envía la instrucci
 
 ## Descripción diagrama de bloques
 
-![Diagrama de bloques](diagrama_de_bloques.jpg)
-
+<p align="center">
+  <img src="./diagrama_de_bloques.jpg" alt="Diagrama de bloques" width="6000"/>
+</p>
 ---
 
 ## Descripción de los Módulos del Sistema y sus Conexiones
@@ -111,9 +114,10 @@ Todo inicia en la FPGA enviando una señal al ESP32; este le envía la instrucci
 
 ## Diagrama de flujo ESP32
 
-![Diagrama de flujo ESP32](Diagrama_de_flujo_ESP32.jpg)
 
-
+<p align="center">
+  <img src="./Diagrama_de_flujo_ESP32.jpg" alt="Diagrama de flujo ESP32" width="6000"/>
+</p>
 
 **Descripción del Diagrama de Flujo – ESP32**  
 Este diagrama representa el flujo de funcionamiento lógico del microcontrolador ESP32 dentro del sistema de monitoreo de turbidez del agua.  
@@ -138,7 +142,9 @@ Este diagrama RTL representa la estructura completa del sistema embebido (SoC) i
 Este RTL muestra cómo la FPGA recibe la señal digital del sensor de turbidez, la interpreta, y en función del nivel medido, toma decisiones automáticas como habilitar o no el paso de agua mediante la válvula. Además, incluye la comunicación UART con el ESP32 para transmitir los datos recolectados, permitiendo su monitoreo remoto o procesamiento adicional.
 
 
-### Adaptación de voltaje para el ADC del ESP32
+---
+
+## Adaptación de voltaje para el ADC del ESP32
 
 La salida analógica del sensor (cable azul en la imagen) entrega una señal en el rango de 0 V a 4.5 V. Sin embargo, la entrada del ADC del ESP32 admite un máximo de 3.3 V, por lo cual conectar esta señal directamente podría dañar el microcontrolador o producir lecturas erróneas.
 
