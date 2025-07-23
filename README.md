@@ -13,6 +13,19 @@ aroseroy@unal.edu.co
 - Daniel santiago Navarro Gil
 dnavarrog@unal.edu.co
 
+
+## Introducción
+
+La calidad del agua es un factor determinante tanto en la salud humana como en la eficiencia de los cultivos agrícolas. Uno de los parámetros fundamentales para evaluar dicha calidad es la turbidez, que representa la cantidad de partículas suspendidas en el agua, como sedimentos, materia orgánica y microorganismos. Diversos estudios han demostrado que niveles elevados de turbidez están asociados a consecuencias negativas para la salud pública y la productividad agrícola.
+
+En particular, un estudio publicado en el Journal of Water and Health señala que el uso de agua con turbidez muy superior a los estándares recomendados por la OMS puede implicar riesgos serios para la inocuidad de alimentos y la salud de los consumidores. En este estudio, el agua utilizada para riego en zonas urbanas presentaba turbidez hasta 17 veces mayor al límite permitido, generando un ambiente propicio para la proliferación de microorganismos patógenos y la contaminación cruzada de los cultivos  
+Fuente: [Irrigation water quality and its impact on the microbial safety of irrigated vegetables in Kumasi, Ghana – IWA Publishing, 2021](https://iwaponline.com/jwh/article/19/3/488/80111/Irrigation-water-quality-and-its-impact-on-the)
+
+Motivados por estas problemáticas, desarrollamos este proyecto con el objetivo de diseñar un sistema de monitoreo digital de turbidez basado en un sensor óptico y un microcontrolador ESP32, que permite detectar de forma continua los niveles de partículas suspendidas en el agua y emitir alertas si estos superan un umbral seguro. La idea es que este sistema pueda ser aplicado en contextos rurales o urbanos con acceso limitado a análisis de laboratorio, facilitando la toma de decisiones rápidas en cuanto al uso del agua para consumo o riego.
+
+En la vida real, este dispositivo puede ser una herramienta económica, portátil y replicable para agricultores, comunidades rurales, plantas de tratamiento o investigadores que deseen evaluar la calidad del agua en tiempo real. Su uso puede prevenir enfermedades transmitidas por el agua, mejorar la seguridad alimentaria, y contribuir al uso más sostenible de los recursos hídricos.
+
+
 ### Descripción general
 Este proyecto consiste en la medición de la turbidez de agua implementando un sensor de turbidez, una tarjeta de desarrollo ESP32 Wi-Fi, una FPGA y la transmisión de estos datos a un servidor vía Wi-Fi.
 
