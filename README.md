@@ -139,21 +139,80 @@ La ESP32 se encarga de recibir instrucciones de la FPGA, realizar lecturas del s
 
 ---
 
-## RTL del SoC
+## Diagramas RTL del Proyecto
+
+El sistema implementado fue sintetizado y verificado en niveles jerárquicos. A continuación se presentan los diagramas RTL (Register Transfer Level) de los principales módulos del diseño implementado en la FPGA.
+
+---
+
+### 1. RTL del SoC completo - `RTL_SoC.jpg`
+
+Este diagrama representa el sistema completo integrado sobre la FPGA. El diseño es un SoC (System-on-Chip) que combina un procesador RISC-V (FemtoRV32) con múltiples periféricos personalizados conectados a un bus interno. Entre los periféricos se encuentra el controlador de riego, encargado de actuar según los niveles de turbidez del agua.
+
+<p align="center">
+  <img src="./Diagrama_de_flujo_ESP32.jpg" alt="Diagrama de flujo ESP32" width="6000"/>
+</p>
 
 
-![RTL SoC](RTL_SoC.jpg)  
-Este diagrama RTL representa la estructura completa del sistema embebido (SoC) implementado en la FPGA. En él se integran los componentes fundamentales para el funcionamiento del sistema, incluyendo:
+Componentes principales:
 
-- El módulo de procesamiento central, encargado de ejecutar la lógica de control basada en los datos de turbidez recibidos.  
-- Interfaces de entrada/salida, como la entrada de señal de turbidez proveniente del sensor, y salidas como la señal de activación de la válvula (`led_valvula`) y la habilitación de comunicación con el ESP32 (`enable_esp`).  
-- Unidades aritméticas y lógicas, utilizadas para procesar y comparar los datos de turbidez con umbrales establecidos.  
-- Multiplexores y decodificadores que seleccionan y direccionan las señales entre los distintos módulos del sistema.  
-- Registros y bloques de memoria donde se almacenan valores constantes o intermedios utilizados en el control.  
-- La lógica de sincronización (`clk`, `reset`) que garantiza el correcto funcionamiento secuencial del sistema.  
+- Módulo principal: femtorv32 SoC, que contiene:
+  - CPU FemtoRV32: procesador ligero RISC-V que ejecuta el código cargado en memoria.
+  - Memoria de instrucciones y datos: accedida directamente por el procesador.
+  - Módulo de interconexión con periféricos: se observa lógica de multiplexado y chip select.
+- Periféricos conectados:
+  - peripheral_uart: controlador de comunicación serie UART.
+  - periph_led_pwm: periférico que genera señales PWM.
+  - periph_controladorriego: módulo de control de riego según turbidez.
+- Señales de interconexión comunes: reloj (clk), reset, señales de dirección, lectura (rd) y escritura (wr).
 
-Este RTL muestra cómo la FPGA recibe la señal digital del sensor de turbidez, la interpreta, y en función del nivel medido, toma decisiones automáticas como habilitar o no el paso de agua mediante la válvula. Además, incluye la comunicación UART con el ESP32 para transmitir los datos recolectados, permitiendo su monitoreo remoto o procesamiento adicional.
+Este diagrama permite visualizar cómo se integran todos los módulos funcionales en el sistema y cómo se conectan al procesador principal, permitiendo su control por software.
 
+---
+
+### 2. RTL del módulo controlador de riego - `RTL_controlador_riego.jpg`
+
+Este RTL muestra la vista estructural del periférico encargado de la lógica de decisión sobre el riego, basado en los niveles de turbidez del agua.
+<p align="center">
+  <img src="./Diagrama_de_flujo_ESP32.jpg" alt="Diagrama de flujo ESP32" width="6000"/>
+</p>
+
+Entradas principales:
+
+- clk: señal de reloj para sincronización.
+- reset: señal de reinicio del módulo.
+- turbidez: señal de entrada digitalizada que representa el nivel de turbidez del agua, recibida desde el ADC.
+- ready_from_esp: señal que indica si el módulo ESP32 está listo para recibir comandos.
+
+Salidas:
+
+- enable_esp: señal que se activa cuando se detecta alta turbidez y se desea activar el sistema de comunicación con el ESP32.
+- led_valvula: señal de control que enciende o apaga un LED o una electroválvula que representa el estado del sistema de riego.
+
+La lógica del módulo se basa en comparar el valor de turbidez contra un umbral predefinido. Si el nivel de turbidez es alto, se activa la señal de riego. Adicionalmente, la señal enable_esp permite al sistema comunicarse con el microcontrolador ESP32 para registrar o reportar eventos.
+
+---
+
+### 3. RTL de la lógica interna del controlador de riego - `RTL_controlador_riego_interno.jpg`
+
+Este diagrama corresponde al nivel más bajo de descripción estructural del módulo controlador de riego, mostrando el detalle de la lógica digital implementada.
+
+<p align="center">
+  <img src="./Diagrama_de_flujo_ESP32.jpg" alt="Diagrama de flujo ESP32" width="6000"/>
+</p>
+
+Componentes destacados:
+
+- Comparadores lógicos: utilizados para comparar el valor de turbidez con umbrales fijos. Se observan comparaciones del tipo A > B, A == B, etc.
+- Multiplexores (MUX): utilizados para seleccionar entre diferentes señales de entrada según las condiciones de control del sistema.
+- Lógica combinacional: conformada por compuertas lógicas y redes de comparadores que permiten la toma de decisiones.
+- Lógica secuencial: basada en registros y flip-flops que almacenan estados de control como ‘enable_esp’ o ‘led_valvula’ de un ciclo a otro.
+- Constantes codificadas: valores como 0x00, 0xC, 0xEEB2B0, que son usados como referencias para comparación o para generar señales de control.
+- Señales internas: incluyen señales temporales y de control intermedio generadas por FSMs (máquinas de estados finitos) o lógica combinacional.
+
+Este diagrama es útil para validar que los componentes de control y decisión dentro del módulo están correctamente conectados y sincronizados con el sistema de reloj principal. También permite observar cómo el sistema responde de forma determinística a los datos de turbidez digitalizados.
+
+---
 
 ---
 
